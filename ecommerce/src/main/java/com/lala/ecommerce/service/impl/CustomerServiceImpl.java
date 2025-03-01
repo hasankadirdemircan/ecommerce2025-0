@@ -43,7 +43,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
         return customerMapper.customerToCustomerDto(customerRepository.save(customer));
-
     }
 
     @Override
