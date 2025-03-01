@@ -2,6 +2,7 @@ package com.lala.ecommerce.service;
 
 import com.lala.ecommerce.exception.CategoryDeleteException;
 import com.lala.ecommerce.exception.CategoryDuplicateException;
+import com.lala.ecommerce.exception.CategoryNotFoundException;
 import com.lala.ecommerce.helper.CategoryDOFactory;
 import com.lala.ecommerce.model.Category;
 import com.lala.ecommerce.repository.CategoryRepository;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,5 +116,72 @@ public class CategoryServiceTest {
         verify(categoryRepository, times(0)).deleteById(categoryId);
     }
 
+    @Test
+    void getCategory_success() {
+        //given
+        Long categoryId = 1L;
+        Category category = categoryDOFactory.getCategoryById(categoryId);
 
+        //when
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+        //the
+        Category response = categoryService.getCategory(categoryId);
+
+        //assert
+        assertEquals(category.getId(), response.getId());
+        assertEquals(category.getName(), response.getName());
+        verify(categoryRepository, times(1)).findById(categoryId);
+    }
+
+    @Test
+    void getCategory_shouldThrowCategoryNotFoundException() {
+        //given
+        Long categoryId = 1L;
+
+        //when
+        when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+        //then
+        CategoryNotFoundException thrown = Assertions.assertThrows(CategoryNotFoundException.class,
+                () -> categoryService.getCategory(categoryId));
+
+        //assert
+        assertEquals("Category not found, id : " + categoryId, thrown.getMessage());
+        verify(categoryRepository, times(1)).findById(categoryId);
+    }
+
+    @Test
+    void getCategoryList_success() {
+        //given
+        List<Category> categoryList = categoryDOFactory.getCategoryListWithId();
+
+        //when
+        when(categoryRepository.findAll()).thenReturn(categoryList);
+
+        //then
+        List<Category> response = categoryService.getCategoryList();
+
+        //assert
+        assertEquals(categoryList.size(), response.size());
+        assertEquals(categoryList, response);
+        verify(categoryRepository, times(1)).findAll();
+    }
+
+    @Test
+    void updateCategory() {
+        //given
+        Category savedCategory = categoryDOFactory.getCategoryById(1L);
+
+        //when
+        when(categoryRepository.save(savedCategory)).thenReturn(savedCategory);
+
+        //then
+        Category response = categoryService.updateCategory(savedCategory);
+
+        //assert
+        assertEquals(savedCategory.getId(), response.getId());
+        assertEquals(savedCategory, response);
+        verify(categoryRepository, times(1)).save(savedCategory);
+    }
 }
