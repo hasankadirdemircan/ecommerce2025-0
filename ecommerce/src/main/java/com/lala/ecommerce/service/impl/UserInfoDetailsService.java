@@ -1,9 +1,8 @@
-package com.lala.ecommerce.service;
+package com.lala.ecommerce.service.impl;
 
 import com.lala.ecommerce.config.UserInfoDetails;
 import com.lala.ecommerce.model.Customer;
 import com.lala.ecommerce.repository.CustomerRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

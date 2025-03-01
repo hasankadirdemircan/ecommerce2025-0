@@ -1,7 +1,7 @@
 package com.lala.ecommerce.config;
 
 import com.lala.ecommerce.filter.JwtAuthFilter;
-import com.lala.ecommerce.service.UserInfoDetailsService;
+import com.lala.ecommerce.service.impl.UserInfoDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

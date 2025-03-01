@@ -1,7 +1,7 @@
 package com.lala.ecommerce.filter;
 
 import com.lala.ecommerce.service.JwtService;
-import com.lala.ecommerce.service.UserInfoDetailsService;
+import com.lala.ecommerce.service.impl.UserInfoDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
