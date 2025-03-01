@@ -26,4 +26,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query("UPDATE Product p SET p.active = :isActive WHERE p.id = :id")
     void updateProductActive(@Param("isActive") boolean isActive, @Param("id") Long id);
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.categoryId = :categoryId")
+    Long getProductCountByCategoryId(@Param("categoryId") Long categoryId);
+
 }
