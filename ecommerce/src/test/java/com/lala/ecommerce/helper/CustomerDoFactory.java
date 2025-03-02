@@ -6,11 +6,11 @@ import com.lala.ecommerce.model.Customer;
 
 public class CustomerDoFactory {
 
-    public Customer generateCustomerById(Long id) {
+    public Customer generateCustomerById(Long id, String role) {
         Customer customer = new Customer();
         customer.setId(id);
         customer.setEmail("test");
-        customer.setRoles("ROLE_USER");
+        customer.setRoles(role);
         customer.setFirstName("firstname");
         customer.setLastName("lastname");
         customer.setPassword("password");

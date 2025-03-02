@@ -1,18 +1,18 @@
 package com.lala.ecommerce.helper;
 
+import com.lala.ecommerce.dto.AuthDto;
 import com.lala.ecommerce.dto.CustomerDto;
+import com.lala.ecommerce.dto.LoginDto;
 import com.lala.ecommerce.model.Address;
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 
 public class CustomerDtoFactory {
 
 
-    public CustomerDto generateCustomerDtoById(Long id) {
+    public CustomerDto generateCustomerDtoById(Long id, String role) {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setId(id);
         customerDto.setEmail("test");
-        customerDto.setRoles("ROLE_USER");
+        customerDto.setRoles(role);
         customerDto.setFirstName("firstname");
         customerDto.setLastName("lastname");
 
@@ -26,5 +26,21 @@ public class CustomerDtoFactory {
         customerDto.setAddress(address);
 
         return customerDto;
+    }
+
+    public AuthDto generateAuthDto() {
+        AuthDto authDto = new AuthDto();
+        authDto.setEmail("email");
+        authDto.setPassword("password");
+
+        return authDto;
+    }
+
+    public LoginDto generateLoginDto() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setToken("auth-token");
+        loginDto.setCustomerId(1L);
+
+        return loginDto;
     }
 }

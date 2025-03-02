@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean doOrder(OrderRequest orderRequest) {
-//        sendMail("@gmail.", "", 0);
+
         productUnitStockCheck(orderRequest.getOrderList());
         List<Double> orderTotalCostList = new ArrayList<>();
         orderRequest.getOrderList().forEach(orderRequestInfo -> {
@@ -63,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
         //mail entegrasyonu yap
 
         Double orderTotalCost = orderTotalCostList.stream().mapToDouble(Double::doubleValue).sum();
+        sendMail("", "", 0);
         return true;
     }
 
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
-            helper.setFrom("e69072259@gmail.com", "Lala");
+            helper.setFrom("", "Lala");
             helper.setTo(emailTo);
             helper.setSubject("Hello " + firstName + " Your Order is in progress");
             String content = "<p>" + "Hello " + firstName + "</p><p>The total cost is "+ totalCost + "</p>";
