@@ -2,16 +2,20 @@ package com.lala.ecommerce.service.impl;
 
 import com.lala.ecommerce.dto.OrderProductInfo;
 import com.lala.ecommerce.dto.OrderRequest;
+import com.lala.ecommerce.exception.CustomerNotFoundException;
 import com.lala.ecommerce.exception.InsufficientProductUnitException;
 import com.lala.ecommerce.exception.ProductNotFoundException;
+import com.lala.ecommerce.model.Customer;
 import com.lala.ecommerce.model.Order;
 import com.lala.ecommerce.model.Product;
+import com.lala.ecommerce.repository.CustomerRepository;
 import com.lala.ecommerce.repository.OrderRepository;
 import com.lala.ecommerce.repository.ProductRepository;
 import com.lala.ecommerce.service.OrderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,11 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final JavaMailSender javaMailSender;
+    private final CustomerRepository customerRepository;
+
+
+    @Value("${spring.mail.username}")
+    private String emailFrom;
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
@@ -61,9 +70,10 @@ public class OrderServiceImpl implements OrderService {
         });
 
         //mail entegrasyonu yap
+        Customer customer = customerRepository.findById(orderRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(orderRequest.getCustomerId() + " customer not found"));
 
         Double orderTotalCost = orderTotalCostList.stream().mapToDouble(Double::doubleValue).sum();
-        sendMail("", "", 0);
+        sendMail(customer.getEmail(), customer.getFirstName(), orderTotalCost);
         return true;
     }
 
@@ -82,18 +92,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getCustomerOrderHistory(id);
     }
 
-    public void sendMail(String emailTo, String firstName, double totalCost) {
+    private void sendMail(String emailTo, String firstName, double totalCost) {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
-            helper.setFrom("", "Lala");
+            helper.setFrom(emailFrom, "Lala");
             helper.setTo(emailTo);
             helper.setSubject("Hello " + firstName + " Your Order is in progress");
             String content = "<p>" + "Hello " + firstName + "</p><p>The total cost is "+ totalCost + "</p>";
 
             helper.setText(content, true);
             javaMailSender.send(message);
-        } catch (MessagingException | UnsupportedEncodingException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
