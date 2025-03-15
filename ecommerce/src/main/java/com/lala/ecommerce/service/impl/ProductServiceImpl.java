@@ -12,8 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +27,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(MultipartFile file, Product product) {
-       /* if(Objects.nonNull(file)) {
+        if(Objects.nonNull(file)) {
             String imagePath = saveFile(file, product.getName());
             product.setImage(imagePath);
         }else {
             Product existProduct = productRepository.findById(product.getId()).orElseThrow(() -> new ProductNotFoundException("Product not found, id : " + product.getId()));
             product.setImage(existProduct.getImage());
-        }*/
+        }
         return productRepository.save(product);
     }
 
@@ -69,11 +71,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not Found, id : " + id));
-       /* try {
+        try {
             Files.deleteIfExists(Paths.get(product.getImage()));
         } catch (IOException e) {
             throw new RuntimeException("IO exception while deleting image of " + product.getName() + " path : " + product.getImage());
-        }*/
+        }
         productRepository.deleteById(id);
     }
 

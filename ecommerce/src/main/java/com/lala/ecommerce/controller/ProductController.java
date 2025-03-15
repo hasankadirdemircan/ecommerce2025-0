@@ -4,6 +4,7 @@ import com.lala.ecommerce.model.Product;
 import com.lala.ecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,12 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping(value = "/create" /*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}*/)
+    @PostMapping(value = "/create" , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Product> createProduct(
-            //@RequestPart("product") Product product
-          //  @RequestPart(value = "file", required = false) MultipartFile file
-            @RequestBody Product product
+            @RequestPart("product") Product product,
+            @RequestPart(value = "file", required = false) MultipartFile file
             ) {
-        MultipartFile file = null;
         return new ResponseEntity<>(productService.createProduct(file, product), HttpStatus.CREATED);
     }
 
