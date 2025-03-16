@@ -67,12 +67,11 @@ public class ProductController {
         return new ResponseEntity<>(productService.getAllProductList(), HttpStatus.OK);
     }
 
-    @PutMapping("/update" /*, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}*/ )
+    @PutMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Product> updateProduct(   //@RequestPart("product") Product product
-                                                    //  @RequestPart(value = "file", required = false) MultipartFile file
-                                                    @RequestBody Product product) {
-        MultipartFile file = null;
+    public ResponseEntity<Product> updateProduct(@RequestPart("product") Product product,
+                                                 @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
         return new ResponseEntity<>(productService.createProduct(file, product), HttpStatus.OK);
     }
 }
