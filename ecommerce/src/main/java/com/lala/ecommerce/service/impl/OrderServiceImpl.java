@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
         Customer customer = customerRepository.findById(orderRequest.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(orderRequest.getCustomerId() + " customer not found"));
 
         Double orderTotalCost = orderTotalCostList.stream().mapToDouble(Double::doubleValue).sum();
-        sendMail(customer.getEmail(), customer.getFirstName(), orderTotalCost);
+      //  sendMail(customer.getEmail(), customer.getFirstName(), orderTotalCost);
         return true;
     }
 
